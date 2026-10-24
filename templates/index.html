@@ -1,0 +1,250 @@
+{% extends "base.html" %}
+
+{% block title %}Verify Product Authenticity | TrustChain Blockchain{% endblock %}
+
+{% block content %}
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+
+    <!-- Hero Section -->
+    <div class="text-center max-w-3xl mx-auto mb-12">
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-semibold mb-4">
+            <i class="fa-solid fa-shield-halved"></i> Cryptographic Anti-Counterfeit Verification
+        </div>
+        <h1 class="text-4xl sm:text-5xl font-extrabold tracking-tight text-white mb-4">
+            Verify If Your Product is <span class="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-cyan-400">Genuine or Fake</span>
+        </h1>
+        <p class="text-slate-400 text-base sm:text-lg">
+            Scan the QR code printed on the product packaging or enter the unique Product Blockchain ID to trace its immutable origin and supply chain history.
+        </p>
+    </div>
+
+    <!-- Verification Card (Dual mode: Camera Scanner / Manual Input) -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+
+        <!-- Left Column: Camera / File QR Scanner (7 Cols) -->
+        <div class="lg:col-span-7 bg-slate-800/80 backdrop-blur border border-slate-700/80 rounded-2xl p-6 shadow-2xl">
+            <div class="flex items-center justify-between mb-4 border-b border-slate-700 pb-3">
+                <div class="flex items-center gap-2">
+                    <i class="fa-solid fa-camera text-emerald-400 text-lg"></i>
+                    <h2 class="text-lg font-bold text-white">Live QR Code Scanner</h2>
+                </div>
+                <span class="text-xs text-slate-400">Powered by HTML5 QR Engine</span>
+            </div>
+
+            <!-- Scanner Camera Box -->
+            <div class="relative bg-slate-950 rounded-xl overflow-hidden border border-slate-800 p-2 min-h-[320px] flex flex-col items-center justify-center text-center">
+                <div id="reader" class="w-full max-w-md mx-auto overflow-hidden rounded-lg"></div>
+
+                <div id="scannerPlaceholder" class="p-8 flex flex-col items-center">
+                    <div class="w-16 h-16 rounded-full bg-slate-800/80 border border-slate-700 flex items-center justify-center text-slate-400 mb-4 animate-pulse">
+                        <i class="fa-solid fa-qrcode text-3xl text-emerald-400"></i>
+                    </div>
+                    <p class="text-slate-300 font-medium mb-1">Camera Scanner is Inactive</p>
+                    <p class="text-xs text-slate-500 mb-5 max-w-xs">Click below to activate your webcam or mobile camera to scan product QR codes instantly.</p>
+                    
+                    <button id="startScanBtn" class="px-5 py-2.5 rounded-xl bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 text-white text-sm font-semibold shadow-lg shadow-emerald-500/20 flex items-center gap-2 transition-all">
+                        <i class="fa-solid fa-video"></i> Start Camera Scanner
+                    </button>
+                    <button id="stopScanBtn" class="hidden px-5 py-2.5 rounded-xl bg-rose-600 hover:bg-rose-700 text-white text-sm font-semibold flex items-center gap-2 transition-all">
+                        <i class="fa-solid fa-stop"></i> Stop Camera Scanner
+                    </button>
+                </div>
+            </div>
+
+            <!-- Or Upload QR Image -->
+            <div class="mt-4 pt-4 border-t border-slate-700/60 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-slate-400">
+                <div class="flex items-center gap-2">
+                    <i class="fa-solid fa-image text-cyan-400"></i>
+                    <span>Or upload a QR code image from your device:</span>
+                </div>
+                <input type="file" id="qrFileInput" accept="image/*" class="text-xs text-slate-400 file:mr-2 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-slate-700 file:text-slate-200 hover:file:bg-slate-600 cursor-pointer">
+            </div>
+        </div>
+
+        <!-- Right Column: Manual ID Search & Quick Demo (5 Cols) -->
+        <div class="lg:col-span-5 space-y-6">
+
+            <!-- Manual Search Box -->
+            <div class="bg-slate-800/80 backdrop-blur border border-slate-700/80 rounded-2xl p-6 shadow-2xl">
+                <div class="flex items-center gap-2 mb-4">
+                    <i class="fa-solid fa-magnifying-glass text-cyan-400 text-lg"></i>
+                    <h2 class="text-lg font-bold text-white">Manual Verification</h2>
+                </div>
+
+                <form action="/verify" method="GET" class="space-y-4">
+                    <div>
+                        <label for="productIdInput" class="block text-xs font-semibold uppercase tracking-wider text-slate-300 mb-2">
+                            Product Blockchain ID / Serial
+                        </label>
+                        <div class="relative">
+                            <input type="text" id="productIdInput" name="id" placeholder="e.g. PROD-AAPL-98210" required
+                                class="w-full bg-slate-950 border border-slate-700 rounded-xl px-4 py-3 text-sm text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent uppercase tracking-wider">
+                            <button type="submit" class="absolute right-2 top-2 px-4 py-1.5 rounded-lg bg-emerald-500 hover:bg-emerald-600 text-white text-xs font-bold transition-all shadow-md">
+                                Verify Now
+                            </button>
+                        </div>
+                    </div>
+                </form>
+
+                <div class="mt-4 text-[11px] text-slate-400 leading-relaxed bg-slate-900/50 p-3 rounded-xl border border-slate-800">
+                    <i class="fa-solid fa-circle-info text-emerald-400 mr-1"></i>
+                    The system verifies the cryptographic SHA-256 hash across all blocks in the immutable chain to validate authenticity.
+                </div>
+            </div>
+
+            <!-- Quick Demo One-Click Tester -->
+            <div class="bg-slate-800/80 backdrop-blur border border-slate-700/80 rounded-2xl p-6 shadow-2xl">
+                <div class="flex items-center justify-between mb-3">
+                    <h3 class="text-sm font-bold text-slate-200 flex items-center gap-2">
+                        <i class="fa-solid fa-flask-vial text-amber-400"></i> Quick Test Sandbox
+                    </h3>
+                    <span class="text-[10px] bg-amber-500/10 text-amber-400 border border-amber-500/20 px-2 py-0.5 rounded-full font-semibold">Demo Ready</span>
+                </div>
+                <p class="text-xs text-slate-400 mb-4">Click any sample below to immediately test genuine verification vs fake product detection:</p>
+
+                <div class="space-y-2">
+                    {% for p in sample_products %}
+                    <a href="/verify/{{ p.id }}" class="flex items-center justify-between p-2.5 rounded-xl bg-slate-900/70 border border-slate-700/50 hover:border-emerald-500/50 hover:bg-slate-900 transition-all group">
+                        <div class="flex items-center gap-3">
+                            <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+                            <div>
+                                <p class="text-xs font-semibold text-slate-200 group-hover:text-emerald-300">{{ p.name }}</p>
+                                <p class="text-[10px] text-slate-500 font-mono">{{ p.id }} ({{ p.brand }})</p>
+                            </div>
+                        </div>
+                        <span class="text-[10px] font-semibold text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-md border border-emerald-500/20">Genuine <i class="fa-solid fa-arrow-right text-[8px] ml-1"></i></span>
+                    </a>
+                    {% endfor %}
+
+                    <!-- Counterfeit Test Button -->
+                    <a href="/verify/FAKE-GUCCI-9999" class="flex items-center justify-between p-2.5 rounded-xl bg-rose-950/20 border border-rose-800/40 hover:border-rose-500 hover:bg-rose-950/40 transition-all group">
+                        <div class="flex items-center gap-3">
+                            <span class="w-2 h-2 rounded-full bg-rose-500 animate-ping"></span>
+                            <div>
+                                <p class="text-xs font-semibold text-rose-300">Unregistered Counterfeit Copy</p>
+                                <p class="text-[10px] text-rose-400/70 font-mono">FAKE-GUCCI-9999 (Not on Chain)</p>
+                            </div>
+                        </div>
+                        <span class="text-[10px] font-semibold text-rose-400 bg-rose-500/10 px-2 py-0.5 rounded-md border border-rose-500/20">Test Fake <i class="fa-solid fa-triangle-exclamation text-[8px] ml-1"></i></span>
+                    </a>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- Feature Pillars Section -->
+    <div class="mt-16 grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div class="bg-slate-800/40 border border-slate-800 rounded-2xl p-6">
+            <div class="w-12 h-12 rounded-xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center text-xl mb-4">
+                <i class="fa-solid fa-link"></i>
+            </div>
+            <h3 class="text-base font-bold text-white mb-2">Immutable Blockchain</h3>
+            <p class="text-xs text-slate-400 leading-relaxed">
+                Every manufactured item is sealed with SHA-256 cryptographic hashes and Proof-of-Work mining. Records cannot be deleted, modified, or forged.
+            </p>
+        </div>
+
+        <div class="bg-slate-800/40 border border-slate-800 rounded-2xl p-6">
+            <div class="w-12 h-12 rounded-xl bg-cyan-500/10 text-cyan-400 flex items-center justify-center text-xl mb-4">
+                <i class="fa-solid fa-qrcode"></i>
+            </div>
+            <h3 class="text-base font-bold text-white mb-2">Tamper-Proof QR Codes</h3>
+            <p class="text-xs text-slate-400 leading-relaxed">
+                Unique high-density QR codes generated per unit link directly to the distributed ledger, providing end-consumers instant transparency before buying.
+            </p>
+        </div>
+
+        <div class="bg-slate-800/40 border border-slate-800 rounded-2xl p-6">
+            <div class="w-12 h-12 rounded-xl bg-purple-500/10 text-purple-400 flex items-center justify-center text-xl mb-4">
+                <i class="fa-solid fa-route"></i>
+            </div>
+            <h3 class="text-base font-bold text-white mb-2">End-to-End Provenance</h3>
+            <p class="text-xs text-slate-400 leading-relaxed">
+                Tracks each handover checkpoint from factory assembly to logistics carriers, regional warehouses, and verified retail counters.
+            </p>
+        </div>
+    </div>
+
+</div>
+{% endblock %}
+
+{% block scripts %}
+<!-- HTML5 QR Code Scanner CDN -->
+<script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
+<script>
+    let html5QrcodeScanner = null;
+    const readerElement = document.getElementById('reader');
+    const startBtn = document.getElementById('startScanBtn');
+    const stopBtn = document.getElementById('stopScanBtn');
+    const placeholder = document.getElementById('scannerPlaceholder');
+    const fileInput = document.getElementById('qrFileInput');
+
+    function onScanSuccess(decodedText, decodedResult) {
+        console.log("Scanned text:", decodedText);
+        // If it's a full URL containing verify
+        if (decodedText.includes('/verify/')) {
+            window.location.href = decodedText;
+        } else if (decodedText.startsWith('http://') || decodedText.startsWith('https://')) {
+            window.location.href = decodedText;
+        } else {
+            // Treat as raw Product ID
+            window.location.href = `/verify/${encodeURIComponent(decodedText.trim())}`;
+        }
+    }
+
+    function onScanFailure(error) {
+        // quiet failure
+    }
+
+    if (startBtn) {
+        startBtn.addEventListener('click', () => {
+            placeholder.classList.add('hidden');
+            stopBtn.classList.remove('hidden');
+            
+            html5QrcodeScanner = new Html5Qrcode("reader");
+            const config = { fps: 10, qrbox: { width: 250, height: 250 } };
+            
+            html5QrcodeScanner.start(
+                { facingMode: "environment" },
+                config,
+                onScanSuccess,
+                onScanFailure
+            ).catch(err => {
+                alert("Camera access error: " + err);
+                placeholder.classList.remove('hidden');
+                stopBtn.classList.add('hidden');
+            });
+        });
+    }
+
+    if (stopBtn) {
+        stopBtn.addEventListener('click', () => {
+            if (html5QrcodeScanner) {
+                html5QrcodeScanner.stop().then(() => {
+                    placeholder.classList.remove('hidden');
+                    stopBtn.classList.add('hidden');
+                    readerElement.innerHTML = "";
+                }).catch(err => console.error(err));
+            }
+        });
+    }
+
+    // Handle File upload QR scanning
+    if (fileInput) {
+        fileInput.addEventListener('change', e => {
+            if (e.target.files.length === 0) return;
+            const imageFile = e.target.files[0];
+            const html5QrCode = new Html5Qrcode("reader");
+            html5QrCode.scanFile(imageFile, true)
+                .then(decodedText => {
+                    onScanSuccess(decodedText);
+                })
+                .catch(err => {
+                    alert("Could not detect a valid QR code in this image: " + err);
+                });
+        });
+    }
+</script>
+{% endblock %}

@@ -1,0 +1,129 @@
+{% extends "base.html" %}
+
+{% block title %}Supply Chain & Logistics Portal | TrustChain Blockchain{% endblock %}
+
+{% block content %}
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+
+    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
+        <div>
+            <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-purple-500/10 border border-purple-500/20 text-purple-400 text-xs font-semibold mb-2">
+                <i class="fa-solid fa-truck-fast"></i> Logistics & Custody Handover
+            </div>
+            <h1 class="text-3xl font-extrabold text-white tracking-tight">Supply Chain Checkpoint Logger</h1>
+            <p class="text-sm text-slate-400 mt-1">Append immutable movement records and custody transfers to verify uninterrupted provenance.</p>
+        </div>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+
+        <!-- Left Column: Add Checkpoint Form (5 Cols) -->
+        <div class="lg:col-span-5 bg-slate-800/80 backdrop-blur border border-slate-700/80 rounded-2xl p-6 shadow-2xl">
+            <div class="flex items-center gap-2 mb-6 border-b border-slate-700 pb-3">
+                <i class="fa-solid fa-route text-purple-400 text-lg"></i>
+                <h2 class="text-base font-bold text-white">Record Checkpoint Event</h2>
+            </div>
+
+            <form action="/supply-chain" method="POST" class="space-y-4">
+                <div>
+                    <label class="block text-xs font-semibold text-slate-300 mb-1.5">Select Enrolled Product <span class="text-rose-400">*</span></label>
+                    <select name="product_id" required class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:ring-2 focus:ring-purple-500">
+                        <option value="">-- Choose Registered Product --</option>
+                        {% for p in products %}
+                        <option value="{{ p.id }}">{{ p.name }} ({{ p.id }})</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold text-slate-300 mb-1.5">Checkpoint Event Type <span class="text-rose-400">*</span></label>
+                    <select name="event_type" required class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:ring-2 focus:ring-purple-500">
+                        <option value="QUALITY_INSPECTION_PASSED">Quality Inspection & Cryptographic Seal</option>
+                        <option value="WAREHOUSE_DISPATCH">Dispatched from Central Warehouse</option>
+                        <option value="IN_TRANSIT_LOGISTICS">In-Transit via Air/Road Cargo</option>
+                        <option value="CUSTOMS_CLEARED">Customs Inspection & Port Clearance</option>
+                        <option value="DISTRIBUTOR_RECEIVED">Received by Regional Distributor</option>
+                        <option value="RETAIL_STORE_ARRIVAL">Arrived at Official Retail Store</option>
+                        <option value="SOLD_TO_CUSTOMER">Sold & Warranty Activated by Consumer</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold text-slate-300 mb-1.5">Handling Authority / Actor <span class="text-rose-400">*</span></label>
+                    <input type="text" name="actor" required placeholder="e.g. DHL Express, Central Pharma Warehouse, Croma Store"
+                        class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3.5 py-2.5 text-xs text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-purple-500">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold text-slate-300 mb-1.5">Checkpoint Location (City, Country) <span class="text-rose-400">*</span></label>
+                    <input type="text" name="location" required placeholder="e.g. Mumbai Logistics Hub, India"
+                        class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3.5 py-2.5 text-xs text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-purple-500">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold text-slate-300 mb-1.5">Verification Notes / Status Details</label>
+                    <textarea name="notes" rows="2" placeholder="e.g. Package integrity verified. Seal intact. Ambient temperature logged at 21C..."
+                        class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3.5 py-2 text-xs text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-purple-500"></textarea>
+                </div>
+
+                <button type="submit" class="w-full py-3 rounded-xl bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white text-xs font-bold uppercase tracking-wider flex items-center justify-center gap-2 shadow-lg shadow-purple-500/20 transition-all">
+                    <i class="fa-solid fa-cube"></i> Mine Checkpoint Block
+                </button>
+            </form>
+        </div>
+
+        <!-- Right Column: Recent Movement Feed (7 Cols) -->
+        <div class="lg:col-span-7 bg-slate-800/80 backdrop-blur border border-slate-700/80 rounded-2xl p-6 shadow-2xl">
+            <div class="flex items-center justify-between mb-6 border-b border-slate-700 pb-3">
+                <div class="flex items-center gap-2">
+                    <i class="fa-solid fa-clock-rotate-left text-purple-400 text-lg"></i>
+                    <h2 class="text-base font-bold text-white">Recent Handover & Movement Records</h2>
+                </div>
+                <span class="text-xs text-slate-400">Live Mined Checkpoints</span>
+            </div>
+
+            <div class="space-y-3 max-h-[620px] overflow-y-auto pr-1">
+                {% for evt in recent_events %}
+                <div class="bg-slate-950 p-4 rounded-xl border border-slate-800 hover:border-slate-700 transition-all text-xs space-y-1.5">
+                    <div class="flex items-center justify-between">
+                        <span class="font-bold text-slate-200 flex items-center gap-2">
+                            <span class="w-2 h-2 rounded-full bg-purple-400"></span>
+                            {{ evt.data.event | replace('_', ' ') }}
+                        </span>
+                        <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-purple-500/10 text-purple-300 border border-purple-500/20">
+                            Block #{{ evt.index }}
+                        </span>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-2 text-[11px] text-slate-400">
+                        <div>Product: <strong class="text-slate-300">{{ evt.data.product_name or evt.data.product_id }}</strong></div>
+                        <div>Handler: <strong class="text-slate-300">{{ evt.data.current_owner or evt.data.manufacturer }}</strong></div>
+                        <div>Location: <span class="text-slate-300">{{ evt.data.location or 'N/A' }}</span></div>
+                        <div>Timestamp: <span class="text-slate-300 font-mono">{{ evt.timestamp }}</span></div>
+                    </div>
+
+                    {% if evt.data.notes %}
+                    <p class="text-[11px] text-slate-400 italic bg-slate-900/60 p-2 rounded-lg border border-slate-800/60">
+                        "{{ evt.data.notes }}"
+                    </p>
+                    {% endif %}
+
+                    <div class="pt-1 flex items-center justify-between text-[10px] text-slate-500 font-mono">
+                        <span class="truncate max-w-[280px]" title="{{ evt.hash }}">Hash: {{ evt.hash }}</span>
+                        <a href="/verify/{{ evt.data.product_id }}" class="text-emerald-400 font-sans font-semibold hover:underline">
+                            View Full Timeline →
+                        </a>
+                    </div>
+                </div>
+                {% else %}
+                <div class="text-center py-12 text-slate-500 text-xs">
+                    No movement events logged yet.
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+    </div>
+
+</div>
+{% endblock %}

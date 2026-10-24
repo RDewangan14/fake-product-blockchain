@@ -1,0 +1,237 @@
+{% extends "base.html" %}
+
+{% block title %}Blockchain Explorer & Integrity Audit | TrustChain{% endblock %}
+
+{% block content %}
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+
+    <!-- Header & Blockchain Health Status -->
+    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
+        <div>
+            <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-500/10 border border-amber-500/20 text-amber-400 text-xs font-semibold mb-2">
+                <i class="fa-solid fa-cubes-stacked"></i> Distributed Ledger Audit
+            </div>
+            <h1 class="text-3xl font-extrabold text-white tracking-tight">Blockchain Explorer & Node Inspector</h1>
+            <p class="text-sm text-slate-400 mt-1">Live visualization of all mined blocks, Proof of Work (PoW) nonces, and cryptographic hash chains.</p>
+        </div>
+
+        <div class="flex items-center gap-3">
+            {% if is_valid %}
+            <div class="flex items-center gap-2 px-4 py-2 rounded-xl bg-emerald-950/80 border border-emerald-500/50 text-emerald-300 text-xs font-bold">
+                <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse"></span>
+                <span>Chain Status: VALID & SECURE</span>
+            </div>
+            {% else %}
+            <div class="flex items-center gap-2 px-4 py-2 rounded-xl bg-rose-950/80 border border-rose-500 text-rose-300 text-xs font-bold">
+                <span class="w-2.5 h-2.5 rounded-full bg-rose-500 animate-ping"></span>
+                <span>Chain Status: TAMPER DETECTED (Block #{{ bad_block }})</span>
+            </div>
+            {% endif %}
+
+            <button id="repairChainBtn" class="px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold transition-all shadow-md flex items-center gap-1.5">
+                <i class="fa-solid fa-hammer"></i> Re-Mine & Repair
+            </button>
+        </div>
+    </div>
+
+    <!-- Alert if Tampered -->
+    {% if not is_valid %}
+    <div class="p-4 mb-8 rounded-2xl bg-rose-950/90 border border-rose-500 text-rose-200 shadow-xl flex items-start gap-4">
+        <i class="fa-solid fa-triangle-exclamation text-2xl text-rose-400 mt-0.5"></i>
+        <div>
+            <h4 class="font-bold text-sm text-rose-100">Cryptographic Integrity Violation Detected!</h4>
+            <p class="text-xs text-rose-300 mt-0.5">{{ validation_msg }}</p>
+            <p class="text-xs text-rose-400/90 mt-1">Because block hashes are strictly chained together, any unauthorized modification causes immediate verification failure for consumers scanning products!</p>
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Metrics Cards -->
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+        <div class="bg-slate-800/80 p-4 rounded-2xl border border-slate-700/80">
+            <span class="text-[11px] uppercase font-semibold text-slate-400">Total Blocks Mined</span>
+            <p class="text-2xl font-extrabold text-white mt-1">{{ blocks|length }}</p>
+        </div>
+        <div class="bg-slate-800/80 p-4 rounded-2xl border border-slate-700/80">
+            <span class="text-[11px] uppercase font-semibold text-slate-400">PoW Difficulty</span>
+            <p class="text-2xl font-extrabold text-emerald-400 mt-1">Difficulty 2 <span class="text-xs text-slate-500 font-normal">('00' prefix)</span></p>
+        </div>
+        <div class="bg-slate-800/80 p-4 rounded-2xl border border-slate-700/80">
+            <span class="text-[11px] uppercase font-semibold text-slate-400">Hashing Algorithm</span>
+            <p class="text-2xl font-extrabold text-cyan-400 mt-1">SHA-256</p>
+        </div>
+        <div class="bg-slate-800/80 p-4 rounded-2xl border border-slate-700/80">
+            <span class="text-[11px] uppercase font-semibold text-slate-400">Ledger Immutability</span>
+            <p class="text-2xl font-extrabold {% if is_valid %}text-emerald-400{% else %}text-rose-400{% endif %} mt-1">
+                {% if is_valid %}100% Intact{% else %}Compromised{% endif %}
+            </p>
+        </div>
+    </div>
+
+    <!-- Live Interactive Tamper Demonstration Panel -->
+    <div class="bg-gradient-to-r from-slate-900 via-amber-950/20 to-slate-900 border border-amber-500/30 rounded-2xl p-6 mb-10 shadow-xl">
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-4">
+            <div>
+                <h3 class="text-base font-bold text-amber-300 flex items-center gap-2">
+                    <i class="fa-solid fa-bug text-amber-400"></i> Viva / Project Defense: Adversarial Tamper Attack Simulator
+                </h3>
+                <p class="text-xs text-slate-400 mt-0.5">
+                    Demonstrate how Blockchain prevents counterfeiters or rogue database admins from altering product records. Select a block and inject fake data without re-mining!
+                </p>
+            </div>
+        </div>
+
+        <form id="tamperForm" class="grid grid-cols-1 sm:grid-cols-4 gap-3 items-end">
+            <div>
+                <label class="block text-xs font-semibold text-slate-300 mb-1">Target Block Index</label>
+                <select name="block_index" id="tamperBlockIndex" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:ring-2 focus:ring-amber-500">
+                    {% for b in blocks %}
+                    {% if b.index > 0 %}
+                    <option value="{{ b.index }}">Block #{{ b.index }} ({{ b.data.product_name or b.data.product_id }})</option>
+                    {% endif %}
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div>
+                <label class="block text-xs font-semibold text-slate-300 mb-1">Injected Fake Product Name</label>
+                <input type="text" name="fake_name" value="Counterfeit Replica (Cloned Batch)" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:ring-2 focus:ring-amber-500">
+            </div>
+
+            <div>
+                <label class="block text-xs font-semibold text-slate-300 mb-1">Injected Fake Brand</label>
+                <input type="text" name="fake_brand" value="Pirated Knockoff Co." class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:ring-2 focus:ring-amber-500">
+            </div>
+
+            <div>
+                <button type="submit" class="w-full py-2.5 rounded-xl bg-amber-600 hover:bg-amber-700 text-white text-xs font-bold flex items-center justify-center gap-1.5 transition-all shadow-md">
+                    <i class="fa-solid fa-radiation"></i> Simulate Tampering
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <!-- Visualized Block Chain -->
+    <div class="space-y-6">
+        <h2 class="text-lg font-bold text-white flex items-center gap-2">
+            <i class="fa-solid fa-link text-emerald-400"></i> Ledger Blocks Visualizer
+        </h2>
+
+        <div class="space-y-6">
+            {% for b in blocks %}
+            <div class="relative bg-slate-800/90 backdrop-blur rounded-2xl border {% if bad_block == b.index %}border-rose-500 shadow-rose-950/60 ring-2 ring-rose-500/50{% else %}border-slate-700/80{% endif %} p-6 shadow-xl transition-all">
+                
+                <!-- Block Header -->
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-4 border-b border-slate-700/80">
+                    <div class="flex items-center gap-3">
+                        <span class="w-9 h-9 rounded-xl bg-slate-950 border border-slate-700 flex items-center justify-center text-xs font-bold text-white">
+                            #{{ b.index }}
+                        </span>
+                        <div>
+                            <div class="flex items-center gap-2">
+                                <h3 class="text-sm font-bold text-white">
+                                    {% if b.index == 0 %}Genesis Block{% else %}Block #{{ b.index }} ({{ b.data.event | replace('_', ' ') }}){% endif %}
+                                </h3>
+                                {% if bad_block == b.index %}
+                                <span class="text-[10px] uppercase font-bold px-2 py-0.5 rounded-md bg-rose-500/20 text-rose-400 border border-rose-500/30">
+                                    TAMPERED
+                                </span>
+                                {% endif %}
+                            </div>
+                            <span class="text-[11px] text-slate-400 font-mono">{{ b.timestamp }}</span>
+                        </div>
+                    </div>
+
+                    <div class="flex items-center gap-2 text-xs">
+                        <span class="px-2.5 py-1 rounded-lg bg-slate-900 border border-slate-800 font-mono text-slate-300">
+                            Nonce: <strong class="text-emerald-400">{{ b.nonce }}</strong>
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Hashes Grid -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 my-4 font-mono text-[11px]">
+                    <div class="bg-slate-950 p-3 rounded-xl border border-slate-800">
+                        <span class="text-slate-500 block mb-1 uppercase font-semibold text-[10px]">Previous Block Hash:</span>
+                        <span class="text-slate-400 break-all">{{ b.previous_hash }}</span>
+                    </div>
+                    <div class="bg-slate-950 p-3 rounded-xl border border-slate-800">
+                        <span class="text-slate-500 block mb-1 uppercase font-semibold text-[10px]">Current Block Hash (SHA-256):</span>
+                        <span class="text-emerald-400 break-all font-semibold">{{ b.hash }}</span>
+                    </div>
+                </div>
+
+                <!-- Block Payload Data -->
+                <div class="bg-slate-950 p-4 rounded-xl border border-slate-800 font-mono text-xs">
+                    <div class="flex items-center justify-between text-slate-400 mb-2 font-sans font-semibold text-[11px]">
+                        <span>Block Payload / Smart Transaction Details:</span>
+                        {% if b.data.product_id %}
+                        <a href="/verify/{{ b.data.product_id }}" class="text-emerald-400 hover:underline">Verify {{ b.data.product_id }} →</a>
+                        {% endif %}
+                    </div>
+                    <pre class="text-slate-300 overflow-x-auto whitespace-pre-wrap leading-relaxed text-[11px] bg-slate-900/60 p-3 rounded-lg">{{ b.data | tojson(indent=2) }}</pre>
+                </div>
+
+                <!-- Chaining Arrow -->
+                {% if not loop.last %}
+                <div class="flex justify-center -mb-10 mt-3 relative z-10 pointer-events-none">
+                    <div class="w-8 h-8 rounded-full bg-slate-900 border border-slate-700 flex items-center justify-center text-slate-400 shadow-md">
+                        <i class="fa-solid fa-arrow-down text-xs text-emerald-400"></i>
+                    </div>
+                </div>
+                {% endif %}
+
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    // Tamper attack demo handler
+    const tamperForm = document.getElementById('tamperForm');
+    if (tamperForm) {
+        tamperForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const formData = new FormData(tamperForm);
+            const payload = {
+                block_index: formData.get('block_index'),
+                fake_name: formData.get('fake_name'),
+                fake_brand: formData.get('fake_brand')
+            };
+
+            const res = await fetch('/api/tamper', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+            const data = await res.json();
+            if (data.success) {
+                alert("Tampering simulated! The block data was modified without updating the hash.\nReloading to view broken integrity status.");
+                window.location.reload();
+            } else {
+                alert("Error: " + data.error);
+            }
+        });
+    }
+
+    // Repair chain handler
+    const repairBtn = document.getElementById('repairChainBtn');
+    if (repairBtn) {
+        repairBtn.addEventListener('click', async () => {
+            repairBtn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Re-Mining...`;
+            const res = await fetch('/api/repair', { method: 'POST' });
+            const data = await res.json();
+            if (data.success) {
+                alert(data.message);
+                window.location.reload();
+            } else {
+                alert("Repair failed.");
+            }
+        });
+    }
+</script>
+{% endblock %}

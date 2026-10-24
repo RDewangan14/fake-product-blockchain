@@ -1,0 +1,162 @@
+{% extends "base.html" %}
+
+{% block title %}Project Synopsis & Architecture | SSIPMT Raipur{% endblock %}
+
+{% block content %}
+<div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+
+    <!-- Synopsis Cover Banner -->
+    <div class="bg-gradient-to-r from-slate-900 via-slate-800 to-slate-900 border border-slate-700/80 rounded-3xl p-8 mb-10 shadow-2xl relative overflow-hidden">
+        <div class="max-w-3xl">
+            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 text-xs font-semibold mb-3">
+                <i class="fa-solid fa-graduation-cap"></i> B.Tech. VIII SEM PROJECT (PHASE II) • D033823(033)
+            </div>
+            <h1 class="text-3xl sm:text-4xl font-extrabold text-white tracking-tight mb-2">
+                Fake Product Identification using Blockchain
+            </h1>
+            <p class="text-emerald-400 font-semibold text-sm mb-4">
+                Department of Information Technology • Session 2022-23
+            </p>
+            <p class="text-xs text-slate-300">
+                <strong>Shri Shankaracharya Institute of Professional Management & Technology (SSIPMT), Raipur</strong>
+            </p>
+        </div>
+    </div>
+
+    <!-- Student & Project Team Proforma Card -->
+    <div class="bg-slate-800/80 backdrop-blur border border-slate-700/80 rounded-2xl p-6 mb-10 shadow-xl">
+        <h2 class="text-sm font-bold uppercase tracking-wider text-slate-300 mb-4 flex items-center gap-2">
+            <i class="fa-solid fa-users text-cyan-400"></i> Project Investigators & Proforma Details
+        </h2>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <!-- Student 1 -->
+            <div class="bg-slate-950 p-4 rounded-xl border border-slate-800 flex items-start gap-4">
+                <div class="w-12 h-12 rounded-xl bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 flex items-center justify-center font-bold text-lg">
+                    1
+                </div>
+                <div class="text-xs space-y-1">
+                    <h3 class="font-bold text-sm text-white">Rahul Dewangan</h3>
+                    <p class="text-slate-400">Enrollment No: <strong class="text-slate-200">BH1821</strong></p>
+                    <p class="text-slate-400">Email: <a href="mailto:rahul.dewangan1@ssipmt.com" class="text-cyan-400 hover:underline">rahul.dewangan1@ssipmt.com</a></p>
+                    <p class="text-slate-400">Contact: <span class="text-slate-300 font-mono">+91 6264999654</span></p>
+                </div>
+            </div>
+
+            <!-- Student 2 -->
+            <div class="bg-slate-950 p-4 rounded-xl border border-slate-800 flex items-start gap-4">
+                <div class="w-12 h-12 rounded-xl bg-purple-500/10 border border-purple-500/20 text-purple-400 flex items-center justify-center font-bold text-lg">
+                    2
+                </div>
+                <div class="text-xs space-y-1">
+                    <h3 class="font-bold text-sm text-white">Chirag Gajbhiye</h3>
+                    <p class="text-slate-400">Enrollment No: <strong class="text-slate-200">BH1793</strong></p>
+                    <p class="text-slate-400">Email: <a href="mailto:chirag.gajbhiye@ssipmt.com" class="text-purple-400 hover:underline">chirag.gajbhiye@ssipmt.com</a></p>
+                    <p class="text-slate-400">Contact: <span class="text-slate-300 font-mono">+91 7898097230</span></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Project Introduction & Objectives (Exact from Synopsis) -->
+    <div class="space-y-8 mb-10">
+        
+        <div class="bg-slate-800/80 backdrop-blur border border-slate-700/80 rounded-2xl p-6 shadow-xl text-xs leading-relaxed space-y-4">
+            <h2 class="text-base font-bold text-white flex items-center gap-2">
+                <i class="fa-solid fa-book-open text-emerald-400"></i> Project Introduction
+            </h2>
+            <p class="text-slate-300">
+                Nowadays, Blockchain technology has a great demand in today’s market. It gained a lot of interest over the past few years. Blockchain does not have any trusted intermediary. The attention toward blockchain technology is increasing and it is known for faster transactions and adding more transparency. The contents of its data are tamper-proof.
+            </p>
+            <p class="text-slate-300">
+                A customer thinks many times before purchasing a product, having questions whether the product is fake or real. In order to stop the manufacturing and circulation of fake products, it is important to bring transparency about the products to the notice of the consumers. This system delivers verified original products to the customer and empowers consumers to identify fake vs real items via digital QR verification.
+            </p>
+        </div>
+
+        <!-- Objectives & Purpose -->
+        <div class="bg-slate-800/80 backdrop-blur border border-slate-700/80 rounded-2xl p-6 shadow-xl">
+            <h2 class="text-base font-bold text-white mb-4 flex items-center gap-2">
+                <i class="fa-solid fa-bullseye text-amber-400"></i> Main Objectives & Purpose
+            </h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">
+                <div class="bg-slate-950 p-3.5 rounded-xl border border-slate-800 flex items-start gap-3">
+                    <i class="fa-solid fa-circle-check text-emerald-400 mt-1"></i>
+                    <span class="text-slate-300"><strong>1. Anti-Counterfeit Architecture:</strong> Design an Anti-Counterfeit system leveraging decentralized Blockchain ledger concepts.</span>
+                </div>
+                <div class="bg-slate-950 p-3.5 rounded-xl border border-slate-800 flex items-start gap-3">
+                    <i class="fa-solid fa-circle-check text-emerald-400 mt-1"></i>
+                    <span class="text-slate-300"><strong>2. QR Code Digital Identity:</strong> Secure product details using uniquely encrypted and mined QR codes.</span>
+                </div>
+                <div class="bg-slate-950 p-3.5 rounded-xl border border-slate-800 flex items-start gap-3">
+                    <i class="fa-solid fa-circle-check text-emerald-400 mt-1"></i>
+                    <span class="text-slate-300"><strong>3. Client Transparency:</strong> Provide tamper-proof verified data directly to end-consumers before purchase.</span>
+                </div>
+                <div class="bg-slate-950 p-3.5 rounded-xl border border-slate-800 flex items-start gap-3">
+                    <i class="fa-solid fa-circle-check text-emerald-400 mt-1"></i>
+                    <span class="text-slate-300"><strong>4. Immutability & Security:</strong> Leverage SHA-256 cryptographic linkage to prevent unauthorized database tampering.</span>
+                </div>
+                <div class="bg-slate-950 p-3.5 rounded-xl border border-slate-800 flex items-start gap-3">
+                    <i class="fa-solid fa-circle-check text-emerald-400 mt-1"></i>
+                    <span class="text-slate-300"><strong>5. Demolishing Counterfeit Networks:</strong> Stop the making and sale of duplicate goods by establishing transparent provenance.</span>
+                </div>
+                <div class="bg-slate-950 p-3.5 rounded-xl border border-slate-800 flex items-start gap-3">
+                    <i class="fa-solid fa-circle-check text-emerald-400 mt-1"></i>
+                    <span class="text-slate-300"><strong>6. Consumer Empowerment:</strong> Enable instant barcode/QR verification via mobile phones or webcams.</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Feasibility Analysis -->
+        <div class="bg-slate-800/80 backdrop-blur border border-slate-700/80 rounded-2xl p-6 shadow-xl">
+            <h2 class="text-base font-bold text-white mb-4 flex items-center gap-2">
+                <i class="fa-solid fa-chart-pie text-cyan-400"></i> Feasibility Study
+            </h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
+                <div class="bg-slate-950 p-4 rounded-xl border border-slate-800">
+                    <h3 class="font-bold text-cyan-400 mb-1">Technical Feasibility</h3>
+                    <p class="text-slate-400 leading-relaxed">Built on Python with standard cryptographic libraries (hashlib SHA-256), Flask framework, and QR encoding algorithms. Runs seamlessly across standard platforms.</p>
+                </div>
+                <div class="bg-slate-950 p-4 rounded-xl border border-slate-800">
+                    <h3 class="font-bold text-emerald-400 mb-1">Economic Feasibility</h3>
+                    <p class="text-slate-400 leading-relaxed">Operates on existing computing infrastructure and commodity smartphones without requiring expensive proprietary hardware scanners or servers.</p>
+                </div>
+                <div class="bg-slate-950 p-4 rounded-xl border border-slate-800">
+                    <h3 class="font-bold text-purple-400 mb-1">Operational Feasibility</h3>
+                    <p class="text-slate-400 leading-relaxed">Straightforward web-based UI requiring zero installation for consumers. Intuitive 1-click camera scanning and printable QR code generation.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Technical Specification Stack -->
+        <div class="bg-slate-800/80 backdrop-blur border border-slate-700/80 rounded-2xl p-6 shadow-xl">
+            <h2 class="text-base font-bold text-white mb-4 flex items-center gap-2">
+                <i class="fa-solid fa-layer-group text-blue-400"></i> Technical Architecture & Stack
+            </h2>
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 text-xs text-center">
+                <div class="bg-slate-950 p-3 rounded-xl border border-slate-800">
+                    <i class="fa-brands fa-python text-2xl text-amber-400 mb-2"></i>
+                    <p class="font-bold text-white">Python 3.13</p>
+                    <p class="text-[10px] text-slate-500">Core Engine & PoW</p>
+                </div>
+                <div class="bg-slate-950 p-3 rounded-xl border border-slate-800">
+                    <i class="fa-solid fa-flask text-2xl text-emerald-400 mb-2"></i>
+                    <p class="font-bold text-white">Flask Framework</p>
+                    <p class="text-[10px] text-slate-500">REST API & Web App</p>
+                </div>
+                <div class="bg-slate-950 p-3 rounded-xl border border-slate-800">
+                    <i class="fa-solid fa-database text-2xl text-blue-400 mb-2"></i>
+                    <p class="font-bold text-white">SQLite / SQL</p>
+                    <p class="text-[10px] text-slate-500">Persistent Ledger</p>
+                </div>
+                <div class="bg-slate-950 p-3 rounded-xl border border-slate-800">
+                    <i class="fa-solid fa-qrcode text-2xl text-purple-400 mb-2"></i>
+                    <p class="font-bold text-white">QR & SHA-256</p>
+                    <p class="text-[10px] text-slate-500">Crypto Verification</p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+{% endblock %}
